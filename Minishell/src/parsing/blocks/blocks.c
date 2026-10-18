@@ -1,0 +1,108 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   blocks.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mda-enca <mda-enca@student.42porto.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/02/18 17:22:52 by mda-enca          #+#    #+#             */
+/*   Updated: 2026/03/15 13:09:56 by mda-enca         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../../includes/minishell.h"
+
+t_cmd_block	*parse_blocks(t_token *token, t_mini *mini)
+{
+	int				total_ac;
+	t_cmd_block		*block[3];
+
+	block[0] = NULL;
+	block[1] = NULL;
+	while (token)
+	{
+		if (token->type == T_PIPE)
+			return (pipe_error(block[0], mini), NULL);
+		total_ac = count_ac(token);
+		block[2] = new_block(total_ac);
+		if (!block[2])
+			return (NULL);
+		if (fill_block(block[2], &token, mini, block[0]) != 1)
+			return (NULL);
+		if (!block[0])
+			block[0] = block[2];
+		else
+			block[1]->next = block[2];
+		block[1] = block[2];
+		if (!handle_pipe_token(&token, block[0], mini))
+			return (NULL);
+	}
+	return (block[0]);
+}
+
+int	handle_pipe_token(t_token **token, t_cmd_block *head, t_mini *mini)
+{
+	if (*token && (*token)->type == T_PIPE)
+	{
+		*token = (*token)->next;
+		if (!*token || (*token)->type == T_PIPE)
+			return (pipe_error(head, mini), 0);
+	}
+	return (1);
+}
+
+/*
+	Allocate and initialize the new t_cmd_block
+	structure to represent one command
+	in the pipeline, complete with
+	arrays for its arguments and redirections.
+*/
+
+t_cmd_block	*new_block(int ac)
+{
+	t_cmd_block	*new_block;
+
+	new_block = ft_calloc(1, sizeof(t_cmd_block));
+	if (!new_block)
+		return (NULL);
+	new_block->args = ft_calloc((ac + 1), sizeof(char *));
+	new_block->limits = ft_calloc((ac + 1), sizeof(char *));
+	new_block->input = ft_calloc((ac + 1), sizeof(char *));
+	if (!new_block->args || !new_block->limits || !new_block->input)
+	{
+		free(new_block->args);
+		free(new_block->limits);
+		free(new_block->input);
+		free(new_block);
+		return (NULL);
+	}
+	new_block->last_redir = 0;
+	return (new_block);
+}
+
+/*
+	Consume tokens up to the next pipe and populate a single t_cmd_block.	
+*/
+int	fill_block(t_cmd_block *block, t_token **token,
+			t_mini *mini, t_cmd_block *head)
+{
+	int	i;
+
+	i = 0;
+	while (*token && (*token)->type != T_PIPE)
+	{
+		if (!process_block_token(block, token, &i))
+			return (redir_error(head, block, mini, *token), 0);
+		(*token) = (*token)->next;
+	}
+	block->args[i] = NULL;
+	return (1);
+}
+
+int	pipe_error(t_cmd_block *head, t_mini *mini)
+{
+	free_blocks(head);
+	ft_putendl_fd("bash: syntax error near unexpected token `|'", 2);
+	mini->exit_stts = 2;
+	return (-1);
+}

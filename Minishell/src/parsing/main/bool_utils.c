@@ -1,0 +1,41 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   bool_utils.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mlima-si <mlima-si@student.42porto.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/02/18 17:24:42 by mda-enca          #+#    #+#             */
+/*   Updated: 2026/02/25 16:29:27 by mlima-si         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../../includes/minishell.h"
+
+/*
+	Determine if its a terminal or not.
+*/
+
+int	check_delimiter(char c)
+{
+	if (c == '>' || c == '<' || c == '|')
+		return (1);
+	return (0);
+}
+
+/*
+	Ignore spaces and \t. If there's still str after that return true, 
+		else return false.
+*/
+
+int	check_spaces(char *str)
+{
+	size_t	i;
+
+	i = 0;
+	while (str[i] && (str[i] == ' ' || str[i] == '\t'))
+		i++;
+	if (str[i])
+		return (1);
+	return (0);
+}
