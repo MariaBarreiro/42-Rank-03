@@ -3,7 +3,6 @@
 Rank 03 of the 42 curriculum: concurrency, shell implementation, and a programming exam.
 
 ![Rank](https://img.shields.io/badge/42%20Rank-03-5c6ac4?style=for-the-badge)
-![Project scores](https://img.shields.io/badge/Project%20scores-200%2F200-2ea44f?style=for-the-badge)
 ![Time](https://img.shields.io/badge/Estimated%20time-280%20hours%20%2B%20exam-007ec6?style=for-the-badge)
 
 ---
@@ -14,7 +13,7 @@ Rank 03 of the 42 curriculum: concurrency, shell implementation, and a programmi
 |---|---:|---:|---|
 | 🧠 [Philosophers](https://github.com/MariaBarreiro/42_Philo) | **100/100** | ~70 h | Concurrent programming |
 | 🐚 [minishell](https://github.com/MariaBarreiro/42_Minishell) | **100/100** | ~210 h | Building a simple shell · Group project |
-| ⏱️ Exam Rank 03 | Not provided | 2 days reported | Programming assessment |
+| ⏱️ Exam Rank 03 | **100/100** | 2 days reported | Programming assessment |
 
 ---
 
@@ -76,6 +75,5 @@ make
 
 > A two-day programming assessment.
 
+![Grade](https://img.shields.io/badge/Grade-100%2F100-brightgreen?style=flat-square)
 ![Time](https://img.shields.io/badge/Time-2%20days%20reported-lightgrey?style=flat-square)
-
-The exam grade wasn’t included in the project details.
